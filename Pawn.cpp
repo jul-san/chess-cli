@@ -4,6 +4,7 @@
 Pawn::Pawn(Color color){
   pieceColor = color;
   type = PAWN;
+  icon = "♙";
 }
 
 void Pawn::move(){
@@ -16,4 +17,8 @@ PieceType Pawn::getPieceType() const{
 
 Color Pawn::getPieceColor() const{
   return pieceColor;
+}
+
+char32_t Pawn::getPieceIcon() const{
+  return icon;
 }
