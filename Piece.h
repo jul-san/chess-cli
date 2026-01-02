@@ -1,5 +1,6 @@
 #ifndef PIECE_H
 #define PIECE_H
+#include <string>
 
 enum Color{
   WHITE,
@@ -21,6 +22,7 @@ class Piece{
     virtual void move() = 0;
     virtual PieceType getPieceType() const = 0;
     virtual Color getPieceColor() const = 0;
+    virtual std::string getPieceIcon() const = 0;
 };
 
 #endif
