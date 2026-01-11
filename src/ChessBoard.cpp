@@ -5,6 +5,7 @@
 #include "Pawn.h"
 #include "Rook.h"
 #include "Knight.h"
+#include "Bishop.h"
 
 ChessBoard::ChessBoard(){
   for (int row = 0; row < 8; row++){
@@ -28,6 +29,12 @@ ChessBoard::ChessBoard(){
   board[0][6] = new Knight(BLACK);
   board[7][1] = new Knight(WHITE);
   board[7][6] = new Knight(WHITE);
+
+  // Bishop
+  board[0][2] = new Bishop(BLACK);
+  board[0][5] = new Bishop(BLACK);
+  board[7][2] = new Bishop(WHITE);
+  board[7][5] = new Bishop(WHITE);
 }
 
 void ChessBoard::printBoard() const{
