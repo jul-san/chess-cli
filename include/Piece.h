@@ -2,6 +2,8 @@
 #define PIECE_H
 #include <string>
 
+class ChessBoard;
+
 enum Color{
   WHITE,
   BLACK
@@ -19,7 +21,7 @@ enum PieceType{
 class Piece{
   public:
     virtual ~Piece() = default;
-    virtual void move() = 0;
+    virtual void move(ChessBoard& board, int x_position, int y_position, Color color) = 0;
     virtual PieceType getPieceType() const = 0;
     virtual Color getPieceColor() const = 0;
     virtual std::string getPieceIcon() const = 0;

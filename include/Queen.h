@@ -1,11 +1,11 @@
-#ifndef KNIGHT_H
-#define KNIGHT_H
+#ifndef QUEEN_H
+#define QUEEN_H
 #include "Piece.h"
 #include <string>
 
-class Knight : public Piece{
+class Queen : public Piece{
   public:
-    Knight(Color color);
+    Queen(Color color);
     virtual void move(ChessBoard& board, int x_position, int y_position, Color color) override;
     virtual PieceType getPieceType() const override;
     virtual Color getPieceColor() const override;

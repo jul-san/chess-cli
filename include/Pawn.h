@@ -6,7 +6,7 @@
 class Pawn : public Piece{
   public:
     Pawn(Color color);
-    virtual void move() override;
+    virtual void move(ChessBoard& board, int x_position, int y_position, Color color) override;
     virtual PieceType getPieceType() const override;
     virtual Color getPieceColor() const override;
     virtual std::string getPieceIcon() const override;
