@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Rook.h"
+#include "ChessBoard.h"
 
 Rook::Rook(Color color){
   pieceColor = color;
@@ -7,7 +8,7 @@ Rook::Rook(Color color){
   icon = (color == WHITE) ? "♜ " : "♖ ";
 }
 
-void Rook::move() {
+void Rook::move(ChessBoard& board, int x_position, int y_position, Color color) {
   std::cout << "In Rook CPP" << std::endl;
 }
 

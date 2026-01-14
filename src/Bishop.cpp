@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Bishop.h"
+#include "ChessBoard.h"
 
 Bishop::Bishop(Color color){
   pieceColor = color;
@@ -7,7 +8,7 @@ Bishop::Bishop(Color color){
   icon = (color == WHITE) ? "♝ " : "♗ ";
 }
 
-void Bishop::move() {
+void Bishop::move(ChessBoard& board, int x_position, int y_position, Color color) {
   std::cout << "In Bishop CPP" << std::endl;
 }
 

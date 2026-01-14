@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Knight.h"
+#include "ChessBoard.h"
 
 Knight::Knight(Color color){
   pieceColor = color;
@@ -7,7 +8,7 @@ Knight::Knight(Color color){
   icon = (color == WHITE) ? "♞ " : "♘ ";
 }
 
-void Knight::move(){
+void Knight::move(ChessBoard& board, int x_position, int y_position, Color color){
   std::cout << "In Knight CPP" << std::endl;
 }
 
