@@ -1,7 +1,8 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 #include <cstdint>
-#include "Piece.h"
+
+class Piece;
 
 class ChessBoard{
   private:
@@ -9,6 +10,7 @@ class ChessBoard{
 
   public:
     ChessBoard();
+    Piece* get(int x_position, int y_position);
     void printBoard() const;
 };
 

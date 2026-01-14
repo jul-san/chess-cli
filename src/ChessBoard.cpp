@@ -6,6 +6,8 @@
 #include "Rook.h"
 #include "Knight.h"
 #include "Bishop.h"
+#include "Queen.h"
+#include "King.h"
 
 ChessBoard::ChessBoard(){
   for (int row = 0; row < 8; row++){
@@ -35,6 +37,19 @@ ChessBoard::ChessBoard(){
   board[0][5] = new Bishop(BLACK);
   board[7][2] = new Bishop(WHITE);
   board[7][5] = new Bishop(WHITE);
+
+  // Queen
+  board[0][3] = new Queen(BLACK);
+  board[7][3] = new Queen(WHITE);
+
+  // King
+  board[0][4] = new King(BLACK);
+  board[7][4] = new King(WHITE);
+
+}
+
+Piece* ChessBoard::get(int x_position, int y_position){
+  return board[x_position][y_position];
 }
 
 void ChessBoard::printBoard() const{
