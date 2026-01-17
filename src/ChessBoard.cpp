@@ -48,14 +48,20 @@ ChessBoard::ChessBoard(){
 
 }
 
-Piece* ChessBoard::get(int x_position, int y_position){
-  return board[x_position][y_position];
+Piece* ChessBoard::get(int row, int col){
+  return board[row][col];
+}
+
+void ChessBoard::set(int init_row, int init_col,int new_row, int new_col, Piece* p){
+  board[new_row][new_col] = p;
+  board[init_row][init_col] = nullptr;
 }
 
 void ChessBoard::printBoard() const{
-  std::cout << "PRINT BOARD" << std::endl;
-
+  std::cout << "==================" << std::endl;
+  std::cout << "  0 1 2 3 4 5 6 7" << std::endl;
   for (int row = 0; row < 8; row++){
+    std::cout << row << " ";
     for (int col = 0; col < 8; col++){
       if (board[row][col] == nullptr){
         std::cout << ". ";
@@ -66,4 +72,5 @@ void ChessBoard::printBoard() const{
     }
     std::cout << " \n";
   }
+  std::cout << "==================" << std::endl;
 }
