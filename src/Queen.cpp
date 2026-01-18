@@ -9,7 +9,7 @@ Queen::Queen(Color color){
   icon = (color == WHITE) ? "♛ " : "♕ ";
 }
 
-void Queen::move(ChessBoard& board, int x_position, int y_position, Color color) {
+void Queen::move(ChessBoard& board, int fromRow, int fromCol, int toRow, int toCol, Color color) {
   std::cout << "In Quenn CPP" << std::endl;
 }
 
