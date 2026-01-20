@@ -10,15 +10,15 @@
 #include "King.h"
 
 ChessBoard::ChessBoard(){
-  for (int row = 0; row < 8; row++){
-    for (int col = 0; col < 8; col++){
+  for (int row{0}; row < 8; row++){
+    for (int col{0}; col < 8; col++){
       board[row][col] = nullptr;
     }
   }
 
   // Pawns
-  for (int col = 0; col < 8; col++){ board[1][col] = new Pawn(BLACK); }
-  for (int col = 0; col < 8; col++){ board[6][col] = new Pawn(WHITE); }
+  for (int col{0}; col < 8; col++){ board[1][col] = new Pawn(BLACK); }
+  for (int col{0}; col < 8; col++){ board[6][col] = new Pawn(WHITE); }
 
   // Rooks
   board[0][0] = new Rook(BLACK);
@@ -58,11 +58,13 @@ void ChessBoard::set(int init_row, int init_col,int new_row, int new_col, Piece*
 }
 
 void ChessBoard::printBoard() const{
-  std::cout << "==================" << std::endl;
-  std::cout << "  0 1 2 3 4 5 6 7" << std::endl;
-  for (int row = 0; row < 8; row++){
-    std::cout << row << " ";
-    for (int col = 0; col < 8; col++){
+  std::cout << "                  ████████████████████████" << std::endl;
+  std::cout << "                  ██   0 1 2 3 4 5 6 7  ██" << std::endl;
+
+  for (int row{0}; row < 8; row++){
+    std::cout << "                  ██ " << row << " ";
+    
+    for (int col{0}; col < 8; col++){
       if (board[row][col] == nullptr){
         std::cout << ". ";
       }
@@ -70,7 +72,10 @@ void ChessBoard::printBoard() const{
         std::cout << board[row][col]->getPieceIcon();
       }
     }
+
+    std::cout << " ██";
     std::cout << " \n";
   }
-  std::cout << "==================" << std::endl;
+
+  std::cout << "                  ████████████████████████\n\n" << std::endl;
 }
