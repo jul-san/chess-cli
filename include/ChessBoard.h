@@ -11,6 +11,7 @@ class ChessBoard{
   public:
     ChessBoard();
     Piece* get(int x_position, int y_position);
+    void set(int init_row, int init_col, int new_row, int new_col, Piece* p);
     void printBoard() const;
 };
 
