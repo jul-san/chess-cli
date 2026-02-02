@@ -26,23 +26,19 @@ ChessBoard::ChessBoard(){
   board[7][0] = new Rook(WHITE);
   board[7][7] = new Rook(WHITE);
 
-  // Knight
   board[0][1] = new Knight(BLACK);
   board[0][6] = new Knight(BLACK);
   board[7][1] = new Knight(WHITE);
   board[7][6] = new Knight(WHITE);
 
-  // Bishop
   board[0][2] = new Bishop(BLACK);
   board[0][5] = new Bishop(BLACK);
   board[7][2] = new Bishop(WHITE);
   board[7][5] = new Bishop(WHITE);
 
-  // Queen
   board[0][3] = new Queen(BLACK);
   board[7][3] = new Queen(WHITE);
 
-  // King
   board[0][4] = new King(BLACK);
   board[7][4] = new King(WHITE);
 
@@ -59,10 +55,11 @@ void ChessBoard::set(int init_row, int init_col,int new_row, int new_col, Piece*
 
 void ChessBoard::printBoard() const{
   std::cout << "                  ████████████████████████" << std::endl;
-  std::cout << "                  ██   0 1 2 3 4 5 6 7  ██" << std::endl;
+  std::cout << "                  ██                    ██" << std::endl;
 
+  int num_of_rows = 8;
   for (int row{0}; row < 8; row++){
-    std::cout << "                  ██ " << row << " ";
+    std::cout << "                  ██ " << num_of_rows - row << " ";
     
     for (int col{0}; col < 8; col++){
       if (board[row][col] == nullptr){
@@ -76,6 +73,6 @@ void ChessBoard::printBoard() const{
     std::cout << " ██";
     std::cout << " \n";
   }
-
+  std::cout << "                  ██   A B C D E F G H  ██" << std::endl;
   std::cout << "                  ████████████████████████\n\n" << std::endl;
 }
