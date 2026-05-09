@@ -44,13 +44,15 @@ ChessBoard::ChessBoard(){
 
 }
 
-Piece* ChessBoard::get(int row, int col){
-  return board[row][col];
+Piece* ChessBoard::get(char col, int row){
+  int c = tolower(col) - 'a';
+  int r = 8 - row;
+  return board[c][r];
 }
 
-void ChessBoard::set(int init_row, int init_col,int new_row, int new_col, Piece* p){
-  board[new_row][new_col] = p;
-  board[init_row][init_col] = nullptr;
+void ChessBoard::set(int init_col, int init_row,int new_col, int new_row, Piece* p){
+  board[new_col][new_row] = p;
+  board[init_col][init_row] = nullptr;
 }
 
 void ChessBoard::printBoard() const{
@@ -62,11 +64,11 @@ void ChessBoard::printBoard() const{
     std::cout << "                  ██ " << num_of_rows - row << " ";
     
     for (int col{0}; col < 8; col++){
-      if (board[row][col] == nullptr){
+      if (board[col][row] == nullptr){
         std::cout << ". ";
       }
       else{
-        std::cout << board[row][col]->getPieceIcon();
+        std::cout << board[col][row]->getPieceIcon();
       }
     }
 
