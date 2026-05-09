@@ -9,35 +9,32 @@ Pawn::Pawn(Color color){
   icon = (color == WHITE) ? "♟ " : "♙ ";
 }
 
-void Pawn::move(ChessBoard& board, int fromRow, int fromCol, int toRow, int toCol, Color color){
-  Piece* piece = board.get(fromRow, fromCol);
-  int startingRow = 6;
+void Pawn::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
+  Piece* piece = board.get(fromCol, fromRow);
+  int startingRow = 2;
 
   int rowDiff = std::abs(fromRow - toRow);
   int colDiff = std::abs(fromCol - toCol);
 
   if (piece->getPieceType() == PAWN){
 
-    // Moving one one space forward
-    if (rowDiff == 1 && colDiff == 0 && board.get(toRow, toCol) == nullptr){
-      board.set(fromRow, fromCol, toRow, toCol, piece);
+    if (rowDiff == 1 && colDiff == 0 && board.get(toCol, toRow) == nullptr){
+      board.set(fromCol, fromRow, toCol, toRow, piece);
       return;
     }
 
-    // Moving two spaces forward if on the initial spot
     if (fromRow == startingRow && rowDiff == 2){
-      board.set(fromRow, fromCol, toRow, toCol, piece);
+      board.set(fromCol, fromRow, toCol, toRow, piece);
       return;
     }
 
-    // Moving diagonally if there is a piece that can be taken
-    if (rowDiff == 1 && colDiff == 1 && board.get(toRow, toCol) != nullptr){
-      board.set(fromRow, fromCol, toRow, toCol, piece);
+    if (rowDiff == 1 && colDiff == 1 && board.get(toCol, toRow) != nullptr){
+      board.set(fromCol, fromRow, toCol, toRow, piece);
       return;
     }
 
     std::cout << "You made an illegal Pawn move!" << std::endl;
-    
+
   }
   else{
     std::cout << "You have selected an incorrect piece.";
