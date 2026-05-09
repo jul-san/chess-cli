@@ -8,7 +8,7 @@ Rook::Rook(Color color){
   icon = (color == WHITE) ? "♜ " : "♖ ";
 }
 
-void Rook::move(ChessBoard& board, int fromRow, int fromCol, int toRow, int toCol, Color color) {
+void Rook::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) {
   std::cout << "In Rook CPP" << std::endl;
 }
 

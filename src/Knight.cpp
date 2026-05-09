@@ -8,7 +8,7 @@ Knight::Knight(Color color){
   icon = (color == WHITE) ? "♞ " : "♘ ";
 }
 
-void Knight::move(ChessBoard& board, int fromRow, int fromCol, int toRow, int toCol, Color color){
+void Knight::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
   std::cout << "In Knight CPP" << std::endl;
 }
 

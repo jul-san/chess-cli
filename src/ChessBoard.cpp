@@ -50,9 +50,11 @@ Piece* ChessBoard::get(char col, int row){
   return board[c][r];
 }
 
-void ChessBoard::set(int init_col, int init_row,int new_col, int new_row, Piece* p){
-  board[new_col][new_row] = p;
-  board[init_col][init_row] = nullptr;
+void ChessBoard::set(char init_col, int init_row, char new_col, int new_row, Piece* p){
+  int ic = tolower(init_col) - 'a';  int ir = 8 - init_row;
+  int nc = tolower(new_col)  - 'a';  int nr = 8 - new_row;
+  board[ic][ir] = nullptr;
+  board[nc][nr] = p;
 }
 
 void ChessBoard::printBoard() const{

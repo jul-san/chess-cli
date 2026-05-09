@@ -28,22 +28,25 @@ int main(){
   std::cin >> userChoice;
   
   ChessBoard board;
+  std::string gameState = "WHITE TO MOVE\n";
+  std::cout << "                  " << gameState;
   board.printBoard();
 
   while (true){
     std::cout << " Enter the coordinates of the piece you want to move -> Row# Col#\n\n";
-    int row{}, col{};
-    std::cin >> row >> col;
+    std::string from, to;
+    std::cin >> from >> to;
 
-    Piece* p = board.get(row, col);
+    char fromCol = from[0];
+    int fromRow = from[1] - '0';
+
+    char toCol = to[0];
+    int toRow = to[1] - '0';
+
+    Piece* p = board.get(fromCol, fromRow);
     std::cout << "You have selected " << p->getPieceType() << std::endl;
 
-    std::cout << "Where would you like to move the piece?\n\n";
-
-    int toRow{}, toCol{};
-    std::cin >> toRow >> toCol;
-    
-    p->move(board, row, col, toRow, toCol, WHITE);
+    p->move(board, fromCol, fromRow, toCol, toRow, WHITE);
     board.printBoard();
 
   }
