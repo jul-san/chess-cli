@@ -21,7 +21,7 @@ enum PieceType{
 class Piece{
   public:
     virtual ~Piece() = default;
-    virtual void move(ChessBoard& board, int fromRow, int fromCol, int toRow, int toCol, Color color) = 0;
+    virtual void move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) = 0;
     virtual PieceType getPieceType() const = 0;
     virtual Color getPieceColor() const = 0;
     virtual std::string getPieceIcon() const = 0;

@@ -10,8 +10,8 @@ class ChessBoard{
 
   public:
     ChessBoard();
-    Piece* get(int x_position, int y_position);
-    void set(int init_row, int init_col, int new_row, int new_col, Piece* p);
+    Piece* get(char col, int row);
+    void set(char init_col, int init_row, char new_col, int new_row, Piece* p);
     void printBoard() const;
 };
 
