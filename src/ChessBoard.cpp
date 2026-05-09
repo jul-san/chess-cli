@@ -10,37 +10,41 @@
 #include "King.h"
 
 ChessBoard::ChessBoard(){
-  for (int row{0}; row < 8; row++){
-    for (int col{0}; col < 8; col++){
-      board[row][col] = nullptr;
+  for (int col{0}; col < 8; col++){
+    for (int row{0}; row < 8; row++){
+      board[col][row] = nullptr;
     }
   }
 
-  // Pawns
-  for (int col{0}; col < 8; col++){ board[1][col] = new Pawn(BLACK); }
-  for (int col{0}; col < 8; col++){ board[6][col] = new Pawn(WHITE); }
+  // Pawns: black on rank 7 (row index 1), white on rank 2 (row index 6)
+  for (int col{0}; col < 8; col++){ board[col][1] = new Pawn(BLACK); }
+  for (int col{0}; col < 8; col++){ board[col][6] = new Pawn(WHITE); }
 
-  // Rooks
+  // Rooks: a8, h8, a1, h1
   board[0][0] = new Rook(BLACK);
-  board[0][7] = new Rook(BLACK);
-  board[7][0] = new Rook(WHITE);
+  board[7][0] = new Rook(BLACK);
+  board[0][7] = new Rook(WHITE);
   board[7][7] = new Rook(WHITE);
 
-  board[0][1] = new Knight(BLACK);
-  board[0][6] = new Knight(BLACK);
-  board[7][1] = new Knight(WHITE);
-  board[7][6] = new Knight(WHITE);
+  // Knights: b8, g8, b1, g1
+  board[1][0] = new Knight(BLACK);
+  board[6][0] = new Knight(BLACK);
+  board[1][7] = new Knight(WHITE);
+  board[6][7] = new Knight(WHITE);
 
-  board[0][2] = new Bishop(BLACK);
-  board[0][5] = new Bishop(BLACK);
-  board[7][2] = new Bishop(WHITE);
-  board[7][5] = new Bishop(WHITE);
+  // Bishops: c8, f8, c1, f1
+  board[2][0] = new Bishop(BLACK);
+  board[5][0] = new Bishop(BLACK);
+  board[2][7] = new Bishop(WHITE);
+  board[5][7] = new Bishop(WHITE);
 
-  board[0][3] = new Queen(BLACK);
-  board[7][3] = new Queen(WHITE);
+  // Queens: d8, d1
+  board[3][0] = new Queen(BLACK);
+  board[3][7] = new Queen(WHITE);
 
-  board[0][4] = new King(BLACK);
-  board[7][4] = new King(WHITE);
+  // Kings: e8, e1
+  board[4][0] = new King(BLACK);
+  board[4][7] = new King(WHITE);
 
 }
 
