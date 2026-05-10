@@ -28,12 +28,11 @@ int main(){
   std::cin >> userChoice;
   
   ChessBoard board;
-  std::string gameState = "WHITE TO MOVE\n";
-  std::cout << "                  " << gameState;
-  board.printBoard();
+  Color currentTurn = WHITE;
+  board.printBoard(currentTurn);
 
   while (true){
-    std::cout << " Enter the coordinates of the piece you want to move -> Row# Col#\n\n";
+    std::cout << " Enter move in algebraic notation (e.g. e2 e4)\n\n";
     std::string from, to;
     std::cin >> from >> to;
 
@@ -44,10 +43,10 @@ int main(){
     int toRow = to[1] - '0';
 
     Piece* p = board.get(fromCol, fromRow);
-    std::cout << "You have selected " << p->getPieceType() << std::endl;
+    p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
 
-    p->move(board, fromCol, fromRow, toCol, toRow, WHITE);
-    board.printBoard();
+    currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
+    board.printBoard(currentTurn);
 
   }
   return 0;

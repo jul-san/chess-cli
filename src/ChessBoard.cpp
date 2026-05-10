@@ -61,9 +61,10 @@ void ChessBoard::set(char init_col, int init_row, char new_col, int new_row, Pie
   board[nc][nr] = p;
 }
 
-void ChessBoard::printBoard() const{
+void ChessBoard::printBoard(Color turn) const{
+  std::string label = (turn == WHITE) ? "    WHITE TO MOVE   " : "    BLACK TO MOVE   ";
   std::cout << "                  ████████████████████████" << std::endl;
-  std::cout << "                  ██                    ██" << std::endl;
+  std::cout << "                  ██" << label << "██" << std::endl;
 
   int num_of_rows = 8;
   for (int row{0}; row < 8; row++){
@@ -81,6 +82,6 @@ void ChessBoard::printBoard() const{
     std::cout << " ██";
     std::cout << " \n";
   }
-  std::cout << "                  ██   A B C D E F G H  ██" << std::endl;
+  std::cout << "                  ██   a b c d e f g h  ██" << std::endl;
   std::cout << "                  ████████████████████████\n\n" << std::endl;
 }
