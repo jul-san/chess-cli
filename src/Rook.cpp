@@ -8,8 +8,9 @@ Rook::Rook(Color color){
   icon = (color == WHITE) ? "♜ " : "♖ ";
 }
 
-void Rook::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) {
+bool Rook::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) {
   std::cout << "In Rook CPP" << std::endl;
+  return false;
 }
 
 PieceType Rook::getPieceType() const{

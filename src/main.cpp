@@ -43,9 +43,11 @@ int main(){
     int toRow = to[1] - '0';
 
     Piece* p = board.get(fromCol, fromRow);
-    p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
+    bool legal = p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
 
-    currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
+    if (legal){
+      currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
+    }
     board.printBoard(currentTurn);
 
   }

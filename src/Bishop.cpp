@@ -8,8 +8,9 @@ Bishop::Bishop(Color color){
   icon = (color == WHITE) ? "♝ " : "♗ ";
 }
 
-void Bishop::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) {
+bool Bishop::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color) {
   std::cout << "In Bishop CPP" << std::endl;
+  return false;
 }
 
 PieceType Bishop::getPieceType() const{

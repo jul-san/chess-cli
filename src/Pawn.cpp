@@ -9,7 +9,7 @@ Pawn::Pawn(Color color){
   icon = (color == WHITE) ? "♟ " : "♙ ";
 }
 
-void Pawn::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
+bool Pawn::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
   Piece* piece = board.get(fromCol, fromRow);
   int startingRow = 2;
 
@@ -20,24 +20,26 @@ void Pawn::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int to
 
     if (rowDiff == 1 && colDiff == 0 && board.get(toCol, toRow) == nullptr){
       board.set(fromCol, fromRow, toCol, toRow, piece);
-      return;
+      return true;
     }
 
     if (fromRow == startingRow && rowDiff == 2){
       board.set(fromCol, fromRow, toCol, toRow, piece);
-      return;
+      return true;
     }
 
     if (rowDiff == 1 && colDiff == 1 && board.get(toCol, toRow) != nullptr){
       board.set(fromCol, fromRow, toCol, toRow, piece);
-      return;
+      return true;
     }
 
-    std::cout << "You made an illegal Pawn move!" << std::endl;
+    std::cout << "Illegal Pawn move!" << std::endl;
+    return false;
 
   }
   else{
-    std::cout << "You have selected an incorrect piece.";
+    std::cout << "You have selected an incorrect piece." << std::endl;
+    return false;
   }
 }
 

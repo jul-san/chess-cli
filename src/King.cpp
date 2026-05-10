@@ -8,8 +8,9 @@ King::King(Color color){
   icon = (color == WHITE) ? "♚ " : "♔ ";
 }
 
-void King::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
+bool King::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
   std::cout << "In King CPP" << std::endl;
+  return false;
 }
 
 PieceType King::getPieceType() const{

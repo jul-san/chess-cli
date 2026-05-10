@@ -9,23 +9,24 @@ Knight::Knight(Color color){
   icon = (color == WHITE) ? "♞ " : "♘ ";
 }
 
-void Knight::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
+bool Knight::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int toRow, Color color){
   int colDiff = std::abs(fromCol - toCol);
   int rowDiff = std::abs(fromRow - toRow);
 
   bool validShape = (colDiff == 1 && rowDiff == 2) || (colDiff == 2 && rowDiff == 1);
   if (!validShape){
-    std::cout << "You made an illegal Knight move!" << std::endl;
-    return;
+    std::cout << "Illegal Knight move!" << std::endl;
+    return false;
   }
 
   Piece* dest = board.get(toCol, toRow);
   if (dest != nullptr && dest->getPieceColor() == color){
-    std::cout << "You made an illegal Knight move!" << std::endl;
-    return;
+    std::cout << "Illegal Knight move!" << std::endl;
+    return false;
   }
 
   board.set(fromCol, fromRow, toCol, toRow, this);
+  return true;
 }
 
 PieceType Knight::getPieceType() const{
