@@ -1,4 +1,5 @@
 #include <iostream>
+#include <format>
 #include <climits>
 #include "Pawn.h"
 #include "ChessBoard.h"
@@ -33,12 +34,13 @@ bool Pawn::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int to
       return true;
     }
 
-    std::cout << "Illegal Pawn move!" << std::endl;
+    std::cout << std::format("Illegal move: {}{}  to {}{} is not a valid Pawn move.\n",
+      fromCol, fromRow, toCol, toRow);
     return false;
 
   }
   else{
-    std::cout << "You have selected an incorrect piece." << std::endl;
+    std::cout << std::format("Illegal move: selected piece at {}{} is not a Pawn.\n", fromCol, fromRow);
     return false;
   }
 }

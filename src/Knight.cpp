@@ -1,4 +1,5 @@
 #include <iostream>
+#include <format>
 #include <cstdlib>
 #include "Knight.h"
 #include "ChessBoard.h"
@@ -15,13 +16,14 @@ bool Knight::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int 
 
   bool validShape = (colDiff == 1 && rowDiff == 2) || (colDiff == 2 && rowDiff == 1);
   if (!validShape){
-    std::cout << "Illegal Knight move!" << std::endl;
+    std::cout << std::format("Illegal move: {}{} to {}{} is not a valid Knight move.\n",
+      fromCol, fromRow, toCol, toRow);
     return false;
   }
 
   Piece* dest = board.get(toCol, toRow);
   if (dest != nullptr && dest->getPieceColor() == color){
-    std::cout << "Illegal Knight move!" << std::endl;
+    std::cout << std::format("Illegal move: {}{} is occupied by a friendly piece.\n", toCol, toRow);
     return false;
   }
 
