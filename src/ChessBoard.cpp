@@ -10,6 +10,9 @@
 #include "Queen.h"
 #include "King.h"
 
+constexpr int colIndex(char col) { return tolower(col) - 'a'; }
+constexpr int rowIndex(int row)  { return 8 - row; }
+
 ChessBoard::ChessBoard(){
   for (int col{0}; col < 8; col++){
     for (int row{0}; row < 8; row++){
@@ -50,16 +53,12 @@ ChessBoard::ChessBoard(){
 }
 
 Piece* ChessBoard::get(char col, int row){
-  int c = tolower(col) - 'a';
-  int r = 8 - row;
-  return board[c][r];
+  return board[colIndex(col)][rowIndex(row)];
 }
 
 void ChessBoard::set(char init_col, int init_row, char new_col, int new_row, Piece* p){
-  int ic = tolower(init_col) - 'a';  int ir = 8 - init_row;
-  int nc = tolower(new_col)  - 'a';  int nr = 8 - new_row;
-  board[ic][ir] = nullptr;
-  board[nc][nr] = p;
+  board[colIndex(init_col)][rowIndex(init_row)] = nullptr;
+  board[colIndex(new_col)][rowIndex(new_row)]   = p;
 }
 
 void ChessBoard::printBoard(Color turn) const{
