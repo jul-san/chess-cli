@@ -1,4 +1,5 @@
 #include <iostream>
+#include <format>
 #include "ChessBoard.h"
 #include "Pawn.h"
 
@@ -43,6 +44,14 @@ int main(){
     int toRow = to[1] - '0';
 
     Piece* p = board.get(fromCol, fromRow);
+
+    if (p == nullptr || p->getPieceColor() != currentTurn){
+      std::string turnStr = (currentTurn == WHITE) ? "WHITE" : "BLACK";
+      std::cout << std::format("You can only move {} pieces.\n", turnStr);
+      board.printBoard(currentTurn);
+      continue;
+    }
+
     bool legal = p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
 
     if (legal){
