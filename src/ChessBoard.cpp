@@ -66,14 +66,18 @@ void ChessBoard::printBoard(Color turn) const{
   std::cout << "                  ████████████████████████\n";
   std::cout << std::format("                  ██ {:^19}██\n", label);
 
-  for (int row{0}; row < 8; row++){
+  bool flip = (turn == BLACK);
+  for (int i{0}; i < 8; i++){
+    int row = flip ? (7 - i) : i;
     std::string rowStr;
-    for (int col{0}; col < 8; col++){
+    for (int j{0}; j < 8; j++){
+      int col = flip ? (7 - j) : j;
       rowStr += (board[col][row] == nullptr) ? ". " : board[col][row]->getPieceIcon();
     }
     std::cout << std::format("                  ██ {} {} ██\n", 8 - row, rowStr);
   }
 
-  std::cout << "                  ██   a b c d e f g h  ██\n";
+  std::string colLabel = flip ? "h g f e d c b a" : "a b c d e f g h";
+  std::cout << std::format("                  ██   {}  ██\n", colLabel);
   std::cout << "                  ████████████████████████\n\n";
 }
