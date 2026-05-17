@@ -55,6 +55,10 @@ int main(){
     bool legal = p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
 
     if (legal){
+      bool wasDoublePush = (p->getPieceType() == PAWN && std::abs(fromRow - toRow) == 2);
+      if (!wasDoublePush){
+        board.clearEnPassant();
+      }
       currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
     }
     board.printBoard(currentTurn);
