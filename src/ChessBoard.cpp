@@ -61,6 +61,23 @@ void ChessBoard::set(char init_col, int init_row, char new_col, int new_row, Pie
   board[colIndex(new_col)][rowIndex(new_row)]   = p;
 }
 
+void ChessBoard::clear(char col, int row){
+  board[colIndex(col)][rowIndex(row)] = nullptr;
+}
+
+void ChessBoard::setEnPassant(char col, int row){
+  enPassantCol = col;
+  enPassantRow = row;
+}
+
+void ChessBoard::clearEnPassant(){
+  enPassantCol = '\0';
+  enPassantRow = 0;
+}
+
+char ChessBoard::getEnPassantCol() const { return enPassantCol; }
+int  ChessBoard::getEnPassantRow() const { return enPassantRow; }
+
 void ChessBoard::printBoard(Color turn) const{
   std::string label = (turn == WHITE) ? "WHITE TO MOVE" : "BLACK TO MOVE";
   std::cout << "                  ████████████████████████\n";
