@@ -5,6 +5,12 @@
 
 class Piece;
 
+struct BoardState {
+  Piece* cells[8][8];
+  char   epCol;
+  int    epRow;
+};
+
 class ChessBoard{
   private:
     Piece* board[8][8];
@@ -21,6 +27,10 @@ class ChessBoard{
     void clearEnPassant();
     char getEnPassantCol() const;
     int  getEnPassantRow() const;
+    BoardState saveState() const;
+    void restoreState(const BoardState& s);
+    bool isInCheck(Color color);
+    bool hasLegalMove(Color color);
 };
 
 #endif
