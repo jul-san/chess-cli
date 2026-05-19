@@ -1,6 +1,8 @@
 #include <iostream>
 #include <format>
+#include <sstream>
 #include <cstdint>
+#include <cstring>
 #include "ChessBoard.h"
 #include "Piece.h"
 #include "Pawn.h"
@@ -77,6 +79,127 @@ void ChessBoard::clearEnPassant(){
 
 char ChessBoard::getEnPassantCol() const { return enPassantCol; }
 int  ChessBoard::getEnPassantRow() const { return enPassantRow; }
+
+BoardState ChessBoard::saveState() const {
+  BoardState s;
+  std::memcpy(s.cells, board, sizeof(board));
+  s.epCol = enPassantCol;
+  s.epRow = enPassantRow;
+  return s;
+}
+
+void ChessBoard::restoreState(const BoardState& s) {
+  std::memcpy(board, s.cells, sizeof(board));
+  enPassantCol = s.epCol;
+  enPassantRow = s.epRow;
+}
+
+bool ChessBoard::isInCheck(Color color) {
+  char kCol = '\0'; int kRow = 0;
+  for (char c = 'a'; c <= 'h'; c++)
+    for (int r = 1; r <= 8; r++) {
+      Piece* p = get(c, r);
+      if (p && p->getPieceColor() == color && p->getPieceType() == KING)
+        { kCol = c; kRow = r; }
+    }
+  if (kCol == '\0') return false;
+
+  Color enemy = (color == WHITE) ? BLACK : WHITE;
+
+  // Pawn attacks — enemy pawns sit one forward-step above/below the king
+  int pawnDir = (color == WHITE) ? 1 : -1;
+  for (int dc = -1; dc <= 1; dc += 2) {
+    char pc = kCol + dc; int pr = kRow + pawnDir;
+    if (pc >= 'a' && pc <= 'h' && pr >= 1 && pr <= 8) {
+      Piece* p = get(pc, pr);
+      if (p && p->getPieceType() == PAWN && p->getPieceColor() == enemy)
+        return true;
+    }
+  }
+
+  // Knight attacks
+  const int kDx[] = { 2, 2,-2,-2, 1, 1,-1,-1};
+  const int kDy[] = { 1,-1, 1,-1, 2,-2, 2,-2};
+  for (int i = 0; i < 8; i++) {
+    char nc = kCol + kDx[i]; int nr = kRow + kDy[i];
+    if (nc >= 'a' && nc <= 'h' && nr >= 1 && nr <= 8) {
+      Piece* p = get(nc, nr);
+      if (p && p->getPieceType() == KNIGHT && p->getPieceColor() == enemy)
+        return true;
+    }
+  }
+
+  // Diagonal attacks (bishop or queen)
+  const int bDx[] = { 1, 1,-1,-1};
+  const int bDy[] = { 1,-1, 1,-1};
+  for (int i = 0; i < 4; i++) {
+    char c = kCol + bDx[i]; int r = kRow + bDy[i];
+    while (c >= 'a' && c <= 'h' && r >= 1 && r <= 8) {
+      Piece* p = get(c, r);
+      if (p) {
+        if (p->getPieceColor() == enemy &&
+            (p->getPieceType() == BISHOP || p->getPieceType() == QUEEN))
+          return true;
+        break;
+      }
+      c += bDx[i]; r += bDy[i];
+    }
+  }
+
+  // Straight attacks (rook or queen)
+  const int rDx[] = { 1,-1, 0, 0};
+  const int rDy[] = { 0, 0, 1,-1};
+  for (int i = 0; i < 4; i++) {
+    char c = kCol + rDx[i]; int r = kRow + rDy[i];
+    while (c >= 'a' && c <= 'h' && r >= 1 && r <= 8) {
+      Piece* p = get(c, r);
+      if (p) {
+        if (p->getPieceColor() == enemy &&
+            (p->getPieceType() == ROOK || p->getPieceType() == QUEEN))
+          return true;
+        break;
+      }
+      c += rDx[i]; r += rDy[i];
+    }
+  }
+
+  // Adjacent enemy king
+  for (int dc = -1; dc <= 1; dc++) for (int dr = -1; dr <= 1; dr++) {
+    if (dc == 0 && dr == 0) continue;
+    char nc = kCol + dc; int nr = kRow + dr;
+    if (nc >= 'a' && nc <= 'h' && nr >= 1 && nr <= 8) {
+      Piece* p = get(nc, nr);
+      if (p && p->getPieceType() == KING && p->getPieceColor() == enemy)
+        return true;
+    }
+  }
+
+  return false;
+}
+
+bool ChessBoard::hasLegalMove(Color color) {
+  std::ostringstream devNull;
+  for (char fc = 'a'; fc <= 'h'; fc++) {
+    for (int fr = 1; fr <= 8; fr++) {
+      Piece* p = get(fc, fr);
+      if (!p || p->getPieceColor() != color) continue;
+      for (char tc = 'a'; tc <= 'h'; tc++) {
+        for (int tr = 1; tr <= 8; tr++) {
+          BoardState saved = saveState();
+          std::streambuf* orig = std::cout.rdbuf(devNull.rdbuf());
+          bool moved = p->move(*this, fc, fr, tc, tr, color);
+          std::cout.rdbuf(orig);
+          if (moved) {
+            bool safe = !isInCheck(color);
+            restoreState(saved);
+            if (safe) return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
 
 void ChessBoard::printBoard(Color turn) const{
   std::string label = (turn == WHITE) ? "WHITE TO MOVE" : "BLACK TO MOVE";
