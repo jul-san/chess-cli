@@ -33,6 +33,10 @@ int main(){
   board.printBoard(currentTurn);
 
   while (true){
+    if (board.isInCheck(currentTurn)){
+      std::string cs = (currentTurn == WHITE) ? "White" : "Black";
+      std::cout << std::format(" *** {} is in check! ***\n", cs);
+    }
     std::cout << " Enter move in algebraic notation (e.g. e2 e4)\n\n";
     std::string from, to;
     std::cin >> from >> to;
@@ -52,14 +56,30 @@ int main(){
       continue;
     }
 
+    BoardState saved = board.saveState();
     bool legal = p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
+
+    if (legal && board.isInCheck(currentTurn)){
+      board.restoreState(saved);
+      std::cout << "Illegal move: that leaves your king in check.\n";
+      legal = false;
+    }
 
     if (legal){
       bool wasDoublePush = (p->getPieceType() == PAWN && std::abs(fromRow - toRow) == 2);
-      if (!wasDoublePush){
-        board.clearEnPassant();
-      }
+      if (!wasDoublePush) board.clearEnPassant();
       currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
+
+      if (!board.hasLegalMove(currentTurn)){
+        board.printBoard(currentTurn);
+        if (board.isInCheck(currentTurn)){
+          std::string winner = (currentTurn == WHITE) ? "BLACK" : "WHITE";
+          std::cout << std::format(" Checkmate! {} wins!\n", winner);
+        } else {
+          std::cout << " Stalemate! The game is a draw.\n";
+        }
+        break;
+      }
     }
     board.printBoard(currentTurn);
 
