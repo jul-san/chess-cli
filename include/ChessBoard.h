@@ -9,6 +9,7 @@ struct BoardState {
   Piece* cells[8][8];
   char   epCol;
   int    epRow;
+  bool   castleRights[4]; // [wKingside, wQueenside, bKingside, bQueenside]
 };
 
 class ChessBoard{
@@ -16,6 +17,7 @@ class ChessBoard{
     Piece* board[8][8];
     char enPassantCol = '\0';
     int  enPassantRow = 0;
+    bool castleRights[4] = {true, true, true, true};
 
   public:
     ChessBoard();
@@ -27,8 +29,12 @@ class ChessBoard{
     void clearEnPassant();
     char getEnPassantCol() const;
     int  getEnPassantRow() const;
+    bool hasCastlingRight(Color color, bool kingside) const;
+    void revokeCastlingRight(Color color, bool kingside);
+    void revokeBothCastlingRights(Color color);
     BoardState saveState() const;
     void restoreState(const BoardState& s);
+    bool isSquareAttacked(char col, int row, Color byEnemy);
     bool isInCheck(Color color);
     bool hasLegalMove(Color color);
 };

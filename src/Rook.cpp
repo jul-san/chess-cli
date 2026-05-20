@@ -43,6 +43,13 @@ bool Rook::move(ChessBoard& board, char fromCol, int fromRow, char toCol, int to
   }
 
   board.set(fromCol, fromRow, toCol, toRow, board.get(fromCol, fromRow));
+
+  // Revoke castling right for whichever corner this rook started from
+  if      (fromCol == 'a' && fromRow == 1) board.revokeCastlingRight(WHITE, false);
+  else if (fromCol == 'h' && fromRow == 1) board.revokeCastlingRight(WHITE, true);
+  else if (fromCol == 'a' && fromRow == 8) board.revokeCastlingRight(BLACK, false);
+  else if (fromCol == 'h' && fromRow == 8) board.revokeCastlingRight(BLACK, true);
+
   return true;
 }
 

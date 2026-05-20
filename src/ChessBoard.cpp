@@ -80,11 +80,29 @@ void ChessBoard::clearEnPassant(){
 char ChessBoard::getEnPassantCol() const { return enPassantCol; }
 int  ChessBoard::getEnPassantRow() const { return enPassantRow; }
 
+static int castleIdx(Color c, bool kingside) {
+  return (c == WHITE ? 0 : 2) + (kingside ? 0 : 1);
+}
+
+bool ChessBoard::hasCastlingRight(Color c, bool kingside) const {
+  return castleRights[castleIdx(c, kingside)];
+}
+
+void ChessBoard::revokeCastlingRight(Color c, bool kingside) {
+  castleRights[castleIdx(c, kingside)] = false;
+}
+
+void ChessBoard::revokeBothCastlingRights(Color c) {
+  castleRights[castleIdx(c, true)]  = false;
+  castleRights[castleIdx(c, false)] = false;
+}
+
 BoardState ChessBoard::saveState() const {
   BoardState s;
   std::memcpy(s.cells, board, sizeof(board));
   s.epCol = enPassantCol;
   s.epRow = enPassantRow;
+  std::memcpy(s.castleRights, castleRights, sizeof(castleRights));
   return s;
 }
 
@@ -92,27 +110,17 @@ void ChessBoard::restoreState(const BoardState& s) {
   std::memcpy(board, s.cells, sizeof(board));
   enPassantCol = s.epCol;
   enPassantRow = s.epRow;
+  std::memcpy(castleRights, s.castleRights, sizeof(castleRights));
 }
 
-bool ChessBoard::isInCheck(Color color) {
-  char kCol = '\0'; int kRow = 0;
-  for (char c = 'a'; c <= 'h'; c++)
-    for (int r = 1; r <= 8; r++) {
-      Piece* p = get(c, r);
-      if (p && p->getPieceColor() == color && p->getPieceType() == KING)
-        { kCol = c; kRow = r; }
-    }
-  if (kCol == '\0') return false;
-
-  Color enemy = (color == WHITE) ? BLACK : WHITE;
-
-  // Pawn attacks — enemy pawns sit one forward-step above/below the king
-  int pawnDir = (color == WHITE) ? 1 : -1;
+bool ChessBoard::isSquareAttacked(char sCol, int sRow, Color byEnemy) {
+  // Pawn attacks: white pawns sit one row below the target, black one row above
+  int pawnRow = (byEnemy == WHITE) ? sRow - 1 : sRow + 1;
   for (int dc = -1; dc <= 1; dc += 2) {
-    char pc = kCol + dc; int pr = kRow + pawnDir;
-    if (pc >= 'a' && pc <= 'h' && pr >= 1 && pr <= 8) {
-      Piece* p = get(pc, pr);
-      if (p && p->getPieceType() == PAWN && p->getPieceColor() == enemy)
+    char pc = sCol + dc;
+    if (pc >= 'a' && pc <= 'h' && pawnRow >= 1 && pawnRow <= 8) {
+      Piece* p = get(pc, pawnRow);
+      if (p && p->getPieceType() == PAWN && p->getPieceColor() == byEnemy)
         return true;
     }
   }
@@ -121,10 +129,10 @@ bool ChessBoard::isInCheck(Color color) {
   const int kDx[] = { 2, 2,-2,-2, 1, 1,-1,-1};
   const int kDy[] = { 1,-1, 1,-1, 2,-2, 2,-2};
   for (int i = 0; i < 8; i++) {
-    char nc = kCol + kDx[i]; int nr = kRow + kDy[i];
+    char nc = sCol + kDx[i]; int nr = sRow + kDy[i];
     if (nc >= 'a' && nc <= 'h' && nr >= 1 && nr <= 8) {
       Piece* p = get(nc, nr);
-      if (p && p->getPieceType() == KNIGHT && p->getPieceColor() == enemy)
+      if (p && p->getPieceType() == KNIGHT && p->getPieceColor() == byEnemy)
         return true;
     }
   }
@@ -133,11 +141,11 @@ bool ChessBoard::isInCheck(Color color) {
   const int bDx[] = { 1, 1,-1,-1};
   const int bDy[] = { 1,-1, 1,-1};
   for (int i = 0; i < 4; i++) {
-    char c = kCol + bDx[i]; int r = kRow + bDy[i];
+    char c = sCol + bDx[i]; int r = sRow + bDy[i];
     while (c >= 'a' && c <= 'h' && r >= 1 && r <= 8) {
       Piece* p = get(c, r);
       if (p) {
-        if (p->getPieceColor() == enemy &&
+        if (p->getPieceColor() == byEnemy &&
             (p->getPieceType() == BISHOP || p->getPieceType() == QUEEN))
           return true;
         break;
@@ -150,11 +158,11 @@ bool ChessBoard::isInCheck(Color color) {
   const int rDx[] = { 1,-1, 0, 0};
   const int rDy[] = { 0, 0, 1,-1};
   for (int i = 0; i < 4; i++) {
-    char c = kCol + rDx[i]; int r = kRow + rDy[i];
+    char c = sCol + rDx[i]; int r = sRow + rDy[i];
     while (c >= 'a' && c <= 'h' && r >= 1 && r <= 8) {
       Piece* p = get(c, r);
       if (p) {
-        if (p->getPieceColor() == enemy &&
+        if (p->getPieceColor() == byEnemy &&
             (p->getPieceType() == ROOK || p->getPieceType() == QUEEN))
           return true;
         break;
@@ -166,15 +174,27 @@ bool ChessBoard::isInCheck(Color color) {
   // Adjacent enemy king
   for (int dc = -1; dc <= 1; dc++) for (int dr = -1; dr <= 1; dr++) {
     if (dc == 0 && dr == 0) continue;
-    char nc = kCol + dc; int nr = kRow + dr;
+    char nc = sCol + dc; int nr = sRow + dr;
     if (nc >= 'a' && nc <= 'h' && nr >= 1 && nr <= 8) {
       Piece* p = get(nc, nr);
-      if (p && p->getPieceType() == KING && p->getPieceColor() == enemy)
+      if (p && p->getPieceType() == KING && p->getPieceColor() == byEnemy)
         return true;
     }
   }
 
   return false;
+}
+
+bool ChessBoard::isInCheck(Color color) {
+  char kCol = '\0'; int kRow = 0;
+  for (char c = 'a'; c <= 'h'; c++)
+    for (int r = 1; r <= 8; r++) {
+      Piece* p = get(c, r);
+      if (p && p->getPieceColor() == color && p->getPieceType() == KING)
+        { kCol = c; kRow = r; }
+    }
+  if (kCol == '\0') return false;
+  return isSquareAttacked(kCol, kRow, (color == WHITE) ? BLACK : WHITE);
 }
 
 bool ChessBoard::hasLegalMove(Color color) {
