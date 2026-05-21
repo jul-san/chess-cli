@@ -56,6 +56,12 @@ int main(){
       continue;
     }
 
+    bool isPawnMove = (p->getPieceType() == PAWN);
+    bool isCapture  = (board.get(toCol, toRow) != nullptr);
+    bool isEPCapture = isPawnMove && (toCol != fromCol)
+                       && (board.get(toCol, toRow) == nullptr)
+                       && (toCol == board.getEnPassantCol() && toRow == board.getEnPassantRow());
+
     BoardState saved = board.saveState();
     bool legal = p->move(board, fromCol, fromRow, toCol, toRow, currentTurn);
 
@@ -66,6 +72,11 @@ int main(){
     }
 
     if (legal){
+      if (isPawnMove || isCapture || isEPCapture)
+        board.resetHalfMoveClock();
+      else
+        board.incrementHalfMoveClock();
+
       bool wasDoublePush = (p->getPieceType() == PAWN && std::abs(fromRow - toRow) == 2);
       if (!wasDoublePush) board.clearEnPassant();
       currentTurn = (currentTurn == WHITE) ? BLACK : WHITE;
@@ -78,6 +89,12 @@ int main(){
         } else {
           std::cout << " Stalemate! The game is a draw.\n";
         }
+        break;
+      }
+
+      if (board.getHalfMoveClock() >= 100){
+        board.printBoard(currentTurn);
+        std::cout << " Draw by the 50-move rule.\n";
         break;
       }
     }

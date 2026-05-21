@@ -18,6 +18,7 @@ class ChessBoard{
     char enPassantCol = '\0';
     int  enPassantRow = 0;
     bool castleRights[4] = {true, true, true, true};
+    int  halfMoveClock = 0;
 
   public:
     ChessBoard();
@@ -34,6 +35,9 @@ class ChessBoard{
     void revokeBothCastlingRights(Color color);
     BoardState saveState() const;
     void restoreState(const BoardState& s);
+    int  getHalfMoveClock() const;
+    void incrementHalfMoveClock();
+    void resetHalfMoveClock();
     bool isSquareAttacked(char col, int row, Color byEnemy);
     bool isInCheck(Color color);
     bool hasLegalMove(Color color);

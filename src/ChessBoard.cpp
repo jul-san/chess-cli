@@ -80,6 +80,10 @@ void ChessBoard::clearEnPassant(){
 char ChessBoard::getEnPassantCol() const { return enPassantCol; }
 int  ChessBoard::getEnPassantRow() const { return enPassantRow; }
 
+int  ChessBoard::getHalfMoveClock() const        { return halfMoveClock; }
+void ChessBoard::incrementHalfMoveClock()         { halfMoveClock++; }
+void ChessBoard::resetHalfMoveClock()             { halfMoveClock = 0; }
+
 static int castleIdx(Color c, bool kingside) {
   return (c == WHITE ? 0 : 2) + (kingside ? 0 : 1);
 }
