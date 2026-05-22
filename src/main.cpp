@@ -2,6 +2,10 @@
 #include <format>
 #include "ChessBoard.h"
 #include "Pawn.h"
+#include "Queen.h"
+#include "Rook.h"
+#include "Bishop.h"
+#include "Knight.h"
 
 void printLogo() {
 
@@ -76,6 +80,23 @@ int main(){
         board.resetHalfMoveClock();
       else
         board.incrementHalfMoveClock();
+
+      if (isPawnMove) {
+        int promotionRank = (currentTurn == WHITE) ? 8 : 1;
+        if (toRow == promotionRank) {
+          char choice = 'q';
+          std::cout << " Pawn promotion! Choose piece (q=Queen, r=Rook, b=Bishop, n=Knight): ";
+          std::cin >> choice;
+          Piece* promoted;
+          switch (tolower(choice)) {
+            case 'r': promoted = new Rook(currentTurn);   break;
+            case 'b': promoted = new Bishop(currentTurn); break;
+            case 'n': promoted = new Knight(currentTurn); break;
+            default:  promoted = new Queen(currentTurn);  break;
+          }
+          board.place(toCol, toRow, promoted);
+        }
+      }
 
       bool wasDoublePush = (p->getPieceType() == PAWN && std::abs(fromRow - toRow) == 2);
       if (!wasDoublePush) board.clearEnPassant();

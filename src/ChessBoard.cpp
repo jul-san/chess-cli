@@ -67,6 +67,10 @@ void ChessBoard::clear(char col, int row){
   board[colIndex(col)][rowIndex(row)] = nullptr;
 }
 
+void ChessBoard::place(char col, int row, Piece* p){
+  board[colIndex(col)][rowIndex(row)] = p;
+}
+
 void ChessBoard::setEnPassant(char col, int row){
   enPassantCol = col;
   enPassantRow = row;

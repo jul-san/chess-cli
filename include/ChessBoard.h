@@ -38,6 +38,7 @@ class ChessBoard{
     int  getHalfMoveClock() const;
     void incrementHalfMoveClock();
     void resetHalfMoveClock();
+    void place(char col, int row, Piece* p);
     bool isSquareAttacked(char col, int row, Color byEnemy);
     bool isInCheck(Color color);
     bool hasLegalMove(Color color);
